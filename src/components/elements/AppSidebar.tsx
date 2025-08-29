@@ -29,10 +29,10 @@ const navigationItems = [
 export function AppSidebar() {
   //   const isActive = (path: string) => currentPath === path;
 
-  const getNavCls = ({ isActive }: { isActive: boolean }) =>
-    isActive
-      ? "bg-primary/10 text-primary font-medium border-r-4 border-primary"
-      : "hover:bg-muted/50 text-muted-foreground hover:text-foreground";
+  // const getNavCls = ({ isActive }: { isActive: boolean }) =>
+  //   isActive
+  //     ? "bg-primary/10 text-primary font-medium border-r-4 border-primary"
+  //     : "hover:bg-muted/50 text-muted-foreground hover:text-foreground";
 
   return (
     <Sidebar className="border-r border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

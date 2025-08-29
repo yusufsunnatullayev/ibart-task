@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, MessageSquare } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import LearningStreak from "./LearningStreak";
 
