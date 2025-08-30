@@ -192,7 +192,7 @@ const Hero = () => {
             return (
               <Link
                 key={course.id}
-                href={`/course/${course.id}`}
+                href={`/courses/${course.id}`}
                 className="group block animate-fade-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
