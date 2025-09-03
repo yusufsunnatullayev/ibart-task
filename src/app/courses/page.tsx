@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,27 +20,15 @@ import {
   Clock,
 } from "lucide-react";
 import Link from "next/link";
+import { useStatistics } from "@/hooks/services/useStatistics";
 const Courses = () => {
-  const stats = [
-    {
-      icon: Users,
-      value: "12,500+",
-      label: "Active Learners",
-      color: "text-primary",
-    },
-    {
-      icon: BookMarked,
-      value: "450,000+",
-      label: "Lessons Completed",
-      color: "text-primary",
-    },
-    {
-      icon: TrendingUp,
-      value: "1.5 bands",
-      label: "Average Score Improvement",
-      color: "text-primary",
-    },
-  ];
+  const { data: stats } = useStatistics();
+
+  const iconMap: Record<string, React.ElementType> = {
+    Users,
+    BookMarked,
+    TrendingUp,
+  };
 
   const courses = [
     {
@@ -108,23 +97,26 @@ const Courses = () => {
 
         {/* Stats Section */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {stats.map((stat, index) => (
-            <Card key={index} className="text-center">
-              <CardContent className="pt-6">
-                <div className="flex justify-center mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center`}
-                  >
-                    <stat.icon className={`w-6 h-6 ${stat.color}`} />
+          {stats?.slice(0, 3)?.map((stat: any, index: number) => {
+            const Icon = iconMap[stat.icon];
+            return (
+              <Card key={index} className="text-center">
+                <CardContent className="pt-6">
+                  <div className="flex justify-center mb-4">
+                    <div
+                      className={`w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center`}
+                    >
+                      <Icon className={`w-6 h-6 ${stat.color}`} />
+                    </div>
                   </div>
-                </div>
-                <div className="text-3xl font-bold text-foreground mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-muted-foreground">{stat.label}</div>
-              </CardContent>
-            </Card>
-          ))}
+                  <div className="text-3xl font-bold text-foreground mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-muted-foreground">{stat.label}</div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         {/* Courses Grid */}

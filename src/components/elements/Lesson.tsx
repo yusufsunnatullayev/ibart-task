@@ -532,6 +532,7 @@ const Lesson = ({ courseId, lessonId }: Props) => {
       },
     };
 
+    console.log(JSON.stringify(tipsMap));
     return tipsMap[courseId as keyof typeof tipsMap] || tipsMap.reading;
   };
 

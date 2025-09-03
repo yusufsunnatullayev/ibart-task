@@ -3,31 +3,19 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-  Phone,
-  User,
-  UserCheck,
-} from "lucide-react";
+import { Eye, EyeOff, LockKeyhole, Mail, User, UserCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useAuthRegister } from "@/hooks/services/useAuth";
+import { useAuthLogin } from "@/hooks/services/useAuth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/hooks/store/useAuthStore";
 
-const Register = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
     email: "",
-    phone: "",
     password: "",
-    agreeTerms: false,
   });
-  const register = useAuthRegister();
+  const login = useAuthLogin();
   const { toast } = useToast();
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
@@ -36,40 +24,28 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.agreeTerms) {
-      toast({
-        title: "Terms Required",
-        description: "Please agree to the terms and conditions.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    register.mutate(formData, {
+    login.mutate(formData, {
       onSuccess: (res) => {
         toast({
-          title: "Registration Successful!",
-          description: "Welcome to IELTS PREP Course.",
+          title: "Login Successful!",
+          description: "Welcome back to IELTS PREP Course.",
         });
         localStorage.setItem("access_token", res.access_token);
-        setUser(formData.fullName);
+        setUser("Yusuf");
         setIsAuthenticated(true);
         router.push("/");
       },
       onError: () => {
         toast({
-          title: "Registration Error!",
-          description: "Failed to register to IELTS PREP Course.",
+          title: "Login Error!",
+          description: "Failed to login to IELTS PREP Course.",
         });
       },
     });
 
     setFormData({
-      fullName: "",
       email: "",
-      phone: "",
       password: "",
-      agreeTerms: false,
     });
   };
 
@@ -90,7 +66,7 @@ const Register = () => {
               <UserCheck className="w-8 h-8 text-primary-foreground" />
             </div>
             <h2 className="text-3xl font-bold text-foreground mb-4">
-              Create Your <span className="text-gradient">Account</span>
+              Login to your <span className="text-gradient">Account</span>
             </h2>
             <p className="text-muted-foreground">
               Start your IELTS preparation journey today with full access to our
@@ -100,28 +76,6 @@ const Register = () => {
 
           <div className="bg-card rounded-2xl p-8 shadow-medium border border-border/50 animate-fade-up">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="reg-name"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Full Name *
-                </Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="reg-name"
-                    name="fullName"
-                    type="text"
-                    placeholder="Enter your full name"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    className="pl-10 h-12 bg-background border-border/50 focus:border-primary"
-                    required
-                  />
-                </div>
-              </div>
-
               <div className="space-y-2">
                 <Label
                   htmlFor="reg-email"
@@ -146,28 +100,6 @@ const Register = () => {
 
               <div className="space-y-2">
                 <Label
-                  htmlFor="reg-phone"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Phone Number *
-                </Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="reg-phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="Enter your phone number"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="pl-10 h-12 bg-background border-border/50 focus:border-primary"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label
                   htmlFor="reg-password"
                   className="text-sm font-medium text-foreground"
                 >
@@ -179,7 +111,7 @@ const Register = () => {
                     id="reg-password"
                     name="password"
                     type={isVisible ? "text" : "password"}
-                    placeholder="Enter password"
+                    placeholder="Enter your password"
                     value={formData.password}
                     onChange={handleChange}
                     className="pl-10 h-12 bg-background border-border/50 focus:border-primary"
@@ -199,44 +131,21 @@ const Register = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="agree-terms"
-                  checked={formData.agreeTerms}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, agreeTerms: checked as boolean })
-                  }
-                />
-                <Label
-                  htmlFor="agree-terms"
-                  className="text-sm text-muted-foreground"
-                >
-                  I agree to the{" "}
-                  <a href="#" className="text-primary hover:underline">
-                    Terms of Service
-                  </a>{" "}
-                  and{" "}
-                  <a href="#" className="text-primary hover:underline">
-                    Privacy Policy
-                  </a>
-                </Label>
-              </div>
-
               <Button
                 type="submit"
                 variant="default"
                 size="lg"
                 className="w-full"
-                disabled={register.isPending}
+                disabled={login.isPending}
               >
-                {register.isPending ? (
+                {login.isPending ? (
                   <>
                     <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                    Creating Account...
+                    Logging in...
                   </>
                 ) : (
                   <>
-                    Create Account
+                    Log in
                     <UserCheck className="w-4 h-4" />
                   </>
                 )}
@@ -275,16 +184,16 @@ const Register = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                Sign up with Google
+                Sign in with Google
               </Button>
 
               <p className="text-xs text-muted-foreground text-center">
-                Already have an account?{" "}
+                Do not have an account?{" "}
                 <Link
-                  href="/login"
+                  href="/register"
                   className="text-primary hover:underline font-medium"
                 >
-                  Sign in here
+                  Sign up here
                 </Link>
               </p>
             </form>
@@ -295,4 +204,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;

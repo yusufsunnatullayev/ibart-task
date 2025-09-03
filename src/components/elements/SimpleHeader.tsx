@@ -1,9 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Flame, Menu } from "lucide-react";
+import { useAuthStore } from "@/hooks/store/useAuthStore";
+import { Flame, Menu, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const SimpleHeader = () => {
+  const { user, isAuthenticated } = useAuthStore();
+  const router = useRouter();
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    router.push("/login");
+  };
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
@@ -38,12 +53,31 @@ const SimpleHeader = () => {
           </div>
 
           {/* Register Button */}
-          <Button
-            asChild
-            className="bg-gradient-primary hover:opacity-90 text-primary-foreground font-semibold px-6 py-2 rounded-full"
-          >
-            <Link href="/register">Register</Link>
-          </Button>
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div className="flex items-center gap-2">
+                  <User size={20} />
+                  <h1>{user}</h1>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={handleLogOut}
+                  className="cursor-pointer"
+                >
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              asChild
+              className="bg-gradient-primary hover:opacity-90 text-primary-foreground font-semibold px-6 py-2 rounded-full"
+            >
+              <Link href="/login">Log in</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

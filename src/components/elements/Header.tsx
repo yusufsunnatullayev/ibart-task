@@ -60,7 +60,7 @@ const Header = () => {
         <div className="hidden lg:flex items-center space-x-4">
           <LearningStreak />
           <Button variant="outline" size="sm" asChild>
-            <Link href="/register">Register</Link>
+            <Link href="/login">Log in</Link>
           </Button>
         </div>
 
@@ -110,7 +110,7 @@ const Header = () => {
                 <LearningStreak />
               </div>
               <Button variant="outline" size="sm" className="w-full" asChild>
-                <Link href="/register">Register</Link>
+                <Link href="/login">Log in</Link>
               </Button>
             </div>
           </nav>
