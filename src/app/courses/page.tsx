@@ -21,8 +21,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useStatistics } from "@/hooks/services/useStatistics";
+import { useAuthStore } from "@/hooks/store/useAuthStore";
+import { useRouter } from "next/navigation";
 const Courses = () => {
   const { data: stats } = useStatistics();
+  const { isAuthenticated } = useAuthStore();
+  const router = useRouter();
 
   const iconMap: Record<string, React.ElementType> = {
     Users,
@@ -165,8 +169,18 @@ const Courses = () => {
                   <Progress value={course.progress} className="h-2" />
                 </div>
 
-                <Button asChild className="w-full">
-                  <Link href={`/courses/${course.id}`}>Continue Learning</Link>
+                <Button
+                  asChild
+                  className="w-full cursor-pointer"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      router.push(`/courses/${course.id}`);
+                    } else {
+                      router.push("/login");
+                    }
+                  }}
+                >
+                  <span>Continue Learning</span>
                 </Button>
               </CardContent>
             </Card>
